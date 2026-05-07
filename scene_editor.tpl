@@ -193,10 +193,56 @@
         .btn-back:hover { background: #666; }
         btn-back { background: #444; color: white; }
         .btn-back:hover { background: #666; }
+
+        .help {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.75rem;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: transparent;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+            user-select: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+        }
+        .help-tooltip {
+            display: none;
+            position: fixed;
+            top: 3.5rem;
+            right: 1.75rem;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 12px 16px;
+            width: 280px;
+            font-size: 0.85rem;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 999;
+        }
+        .help:hover + .help-tooltip,
+        .help-tooltip:hover { display: block; }
     </style>
 </head>
 
 <body>
+
+    <div class="help">?</div>
+    <div class="help-tooltip">
+        <strong>How to use:</strong><br><br>
+        • Click a sensor to select it<br>
+        • Click a piano key to bind that note<br>
+        • The sensor will display its bound note<br><br>
+        <span style="font-size:0.78rem;color:#888;">Changes are saved automatically.</span>
+    </div>
 
     <h1>Sensor Binder</h1>
 
