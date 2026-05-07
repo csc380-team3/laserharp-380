@@ -25,6 +25,44 @@
             margin-bottom: 20px;
             color: #e0e0e0;
         }
+        .help {
+          position: fixed;
+          top: 1rem;
+          right: 1.25rem;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          border: 2px solid black;
+          color: black;
+          font-size: 0.95rem;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: default;
+          user-select: none;
+      }
+      .help-tooltip {
+         display: none;
+         position: fixed;
+         top: 3rem;
+         right: 1.25rem;
+         background: white;
+         border: 1px solid #ccc;
+         border-radius: 8px;
+         padding: 12px 16px;
+         width: 280px;
+         font-size: 0.85rem;
+         color: #333;
+         box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+         z-index: 999;
+     }
+
+     .help:hover + .help-tooltip,
+     .help-tooltip:hover {
+        display: block;
+     }
+
 
         .container {
             display: flex;
@@ -197,6 +235,14 @@
 </head>
 
 <body>
+<div class="help">?</div>
+    <div class="help-tooltip">
+        <strong>How to save:</strong><br><br>
+         • Select a sensor block to activate it<br>
+         • Click a piano key to bind it to that sensor<br>
+         • Repeat for each sensor you want to bind<br>
+         • Click ← Go Back when done, changes save automatically
+    </div>
 
     <h1>Sensor Binder</h1>
 
