@@ -25,6 +25,44 @@
             margin-bottom: 20px;
             color: #e0e0e0;
         }
+        .help {
+          position: fixed;
+          top: 1rem;
+          right: 1.25rem;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          border: 2px solid black;
+          color: black;
+          font-size: 0.95rem;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: default;
+          user-select: none;
+      }
+      .help-tooltip {
+         display: none;
+         position: fixed;
+         top: 3rem;
+         right: 1.25rem;
+         background: white;
+         border: 1px solid #ccc;
+         border-radius: 8px;
+         padding: 12px 16px;
+         width: 280px;
+         font-size: 0.85rem;
+         color: #333;
+         box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+         z-index: 999;
+     }
+
+     .help:hover + .help-tooltip,
+     .help-tooltip:hover {
+        display: block;
+     }
+
 
         .container {
             display: flex;
@@ -104,7 +142,6 @@
             border-radius: 0 0 5px 5px;
             position: relative;
             cursor: pointer;
-            transition: background 0.1s;
         }
 
         .key:hover {
@@ -197,6 +234,14 @@
 </head>
 
 <body>
+<div class="help">?</div>
+    <div class="help-tooltip">
+        <strong>How to save:</strong><br><br>
+         • Select a sensor block to activate it<br>
+         • Click a piano key to bind it to that sensor<br>
+         • Repeat for each sensor you want to bind<br>
+         • Click ← Go Back when done, changes save automatically
+    </div>
 
     <h1>Sensor Binder</h1>
 
@@ -388,13 +433,26 @@
 
         //sensor slector
 
-        document.querySelectorAll(".sensor").forEach(sensor => {
+        document.querySelectorAll(".sensor").forEach((sensor,index) => {
             sensor.addEventListener("click", () => {
                 // Deselect previously selected
                 document.querySelectorAll(".sensor").forEach(s => s.classList.remove("selected"));
                 sensor.classList.add("selected");
                 selectedSensor = sensor;
                 status.textContent = "Sensor " + sensor.dataset.sensor + " selected — Click a piano key";
+
+		document.querySelectorAll(".key").forEach(k => k.classList.remove("active"));
+		const savedMidi = sceneData[index];
+                if (savedMidi && savedMidi !== 0) {
+                    const noteString = MIDIToNoteName(savedMidi);
+                    if (noteString !== "ERR") {
+                        // Find the key element with the matching data-note attribute
+                        const savedKeyElement = document.querySelector(`.key[data-note="${noteString}"]`);
+                        if (savedKeyElement) {
+                            savedKeyElement.classList.add("active");
+                        }
+                    }
+                }
             });
         });
 
@@ -413,15 +471,15 @@
 
 	     const noteAsInt = noteToMidi(note);
 
+	    document.querySelectorAll(".key").forEach(k => k.classList.remove("active"));
+            keyElement.classList.add("active");
 	    fetch(`/bind/${sceneId}/${sensorId}/${noteAsInt }`)
         	.then(response => {
             //update the sensor's note display
 	    	selectedSensor.querySelector(".sensor-note").textContent = `Note: ${note}`;
 
-            //highlight the bound key
-
-            	document.querySelectorAll(".key").forEach(k => k.classList.remove("active"));
-            	keyElement.classList.add("active");
+		sceneData[sensorId] = noteAsInt;
+            	
             	status.textContent = "Bound " + note + " to Sensor " + selectedSensor.dataset.sensor;
 
             //deselect sensor after binding

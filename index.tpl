@@ -7,7 +7,7 @@
     <style>
       body {
           font-family: sans-serif;
-          background: #f5f5f5;
+          background: #2C3038;
           margin: 0;
           padding: 0;
       }
@@ -18,8 +18,8 @@
           width: 28px;
           height: 28px;
           border-radius: 50%;
-          border: 2px solid #aaa;
-          color: #aaa;
+          border: 2px solid black;
+          color: black;
           font-size: 0.95rem;
           font-weight: bold;
           display: flex;
@@ -58,7 +58,7 @@
 
 
       .scene-row {
-          background: #cccccc;
+          background: #2c2f33;
           padding: 3px 3px 3px 3px;
           width: 100%;
           text-align: center;
@@ -81,7 +81,7 @@
       
       .delete-btn {
           background: none;
-          color: #888;
+          color: #2c2f33;
           border: none;
           font-size: 14px;
           padding: 0 4px;
@@ -102,21 +102,25 @@
       }
 
       .card {
-          background: #fff;
-          border: 1px solid #ddd;
+          background: rgb(127, 133, 140);
+          border: 1px solid black;
           border-radius: 10px;
           margin:3px 3px 3px 3px;
           padding: 1rem 1rem;
           text-align: center;
           box-shadow: 0 2px 8px rgba(0,0,0,0.07);
           height: 90vh;
+          display: flex;
+          flex-direction: column;
+          color: #e0e0e0;
       }
       h1 {
+          
           margin: 0 0 0.5rem;
           font-size: 2rem;
       }
       p {
-          color: #666;
+          color: #000000;
           margin: 0 0 2rem;
           font-size: 0.95rem;
       }
@@ -141,16 +145,16 @@
           width:100%;
           margin-top: 10px;
           padding: 6px 0;
-          background: #eee;
-          border: 1px dashed #aaa;
-          bordeer-radius: 4px;
+          background: #639922;
+          border: 1px solid #333;
+          border-radius: 4px;
           font-size: 0.9rem;
-          color: #555;
+          color: #fff;
           cursor: pointer;
           text-align: center;
       }
       .add-btn:hover {
-          background: #ddd;
+          background: #aef7bb;
           color: #333;
       }
           
@@ -169,6 +173,7 @@
         <td style="height:100%;width:200px">
           <div class="card">
             <h1>Scenes</h1>
+             <div style="flex: 1; min-height: 0; overflow-y: auto;">
             <table id="sceneTable" style="width:100%; border-collapse: separate; border-spacing: 0 8px;">
              % for i in range(len(data)):
              <tr style="width:100%">
@@ -179,12 +184,15 @@
              </tr>
             % end
             </table>
+             </div>
             <button class="add-btn" onclick="addScene()">+ Add Scene</button>
           </div>
         </td>
         <td style="height:100%">
           <div class="card">
+          <br><br><br>
             <h1>LaserHarp</h1>
+            <br>
             <p>An interactive laser-based MIDI instrument for live performance.</p>
           </div>
         </td>
@@ -202,7 +210,7 @@
          fetch(`/remove_scene/${index}`)
          .then(res => res.text())
          .then(() => {
-         document.querySelectorAll('#sceneTable tr')[index].remove();
+         window.location.reload();
        });
       }
 
@@ -210,14 +218,10 @@
          fetch('/add_scene')
          .then(res => res.text())
          .then(() => {
-         const table = document.getElementById('sceneTable');
-         const i = table.rows.length;
-         const tr = document.createElement('tr');
-         tr.style.width = '100%';
-         tr.innerHTML = `<td class="scene-row" onclick="selectScene(${i}, this)">Scene ${i + 1}
-	 <button class="delete-btn" onclick="removeScene(event, ${i})">&#x2715;</button>
-	 </td>`;
-         table.appendChild(tr);
+         window.location.reload();
+
+         const scrollDiv = table.closest('div');
+        scrollDiv.scrollTop = scrollDiv.scrollHeight;
         });
       }
 
